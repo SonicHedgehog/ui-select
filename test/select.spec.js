@@ -1645,6 +1645,54 @@ describe('ui-select tests', function() {
       expect(countChoices(el)).toBe(0);
     });
 
+    describe('selectize theme', function() {
+
+      it('should show minimum input notice when > 0 and dropdown is open', function() {
+        setupSelectComponent(2, 'selectize');
+        openDropdown(el);
+        expect($(el).find('.ui-select-input-too-short')).not.toHaveClass('ng-hide');
+      });
+
+      it('should hide minimum input notice when 0 and dropdown is open', function() {
+        setupSelectComponent(0, 'selectize');
+        openDropdown(el);
+        expect($(el).find('.ui-select-input-too-short')).toHaveClass('ng-hide');
+      });
+
+    });
+
+    describe('select2 theme', function() {
+
+      it('should show minimum input notice when > 0 and dropdown is open', function() {
+        setupSelectComponent(2, 'select2');
+        openDropdown(el);
+        expect($(el).find('.ui-select-input-too-short')).not.toHaveClass('ng-hide');
+      });
+
+      it('should hide minimum input notice when 0 and dropdown is open', function() {
+        setupSelectComponent(0, 'select2');
+        openDropdown(el);
+        expect($(el).find('.ui-select-input-too-short')).toHaveClass('ng-hide');
+      });
+
+    });
+
+    describe('bootstrap theme', function() {
+
+      it('should show minimum input notice when > 0 and dropdown is open', function() {
+        setupSelectComponent(2, 'bootstrap');
+        openDropdown(el);
+        expect($(el).find('.ui-select-input-too-short')).not.toHaveClass('ng-hide');
+      });
+
+      it('should hide minimum input notice when 0 and dropdown is open', function() {
+        setupSelectComponent(0, 'bootstrap');
+        openDropdown(el);
+        expect($(el).find('.ui-select-input-too-short')).toHaveClass('ng-hide');
+      });
+
+    });
+
   });
 
   describe('default configuration via uiSelectConfig', function() {
