@@ -1597,5 +1597,51 @@ describe('ui-select tests', function() {
 
     });
 
+    describe('minimumInputLength option', function() {
+
+      function setupWithoutAttr(){
+        return compileTemplate(
+          '<ui-select ng-model="selection.selected"> \
+            <ui-select-match placeholder="Pick one...">{{$select.selected.name}}</ui-select-match> \
+            <ui-select-choices repeat="person in people | filter: $select.search"> \
+              <div ng-bind-html="person.name | highlight: $select.search"></div> \
+              <div ng-bind-html="person.email | highlight: $select.search"></div> \
+            </ui-select-choices> \
+          </ui-select>'
+        );
+      }
+
+      function setupWithAttr(minimumInputLength){
+        return compileTemplate(
+          '<ui-select ng-model="selection.selected" minimum-input-length="'+minimumInputLength+'"> \
+            <ui-select-match placeholder="Pick one...">{{$select.selected.name}}</ui-select-match> \
+            <ui-select-choices repeat="person in people | filter: $select.search"> \
+              <div ng-bind-html="person.name | highlight: $select.search"></div> \
+              <div ng-bind-html="person.email | highlight: $select.search"></div> \
+            </ui-select-choices> \
+          </ui-select>'
+        );
+      }
+
+      it('should be 0 by default', function(){
+        var el = setupWithoutAttr();
+        expect(el.scope().$select.minimumInputLength).toBe(0);
+      });
+
+      it('should set minimum input length if default is set', function(){
+        var uiSelectConfig = $injector.get('uiSelectConfig');
+        uiSelectConfig.minimumInputLength = 2;
+
+        var el = setupWithoutAttr();
+        expect(el.scope().$select.minimumInputLength).not.toBe(0);
+      });
+
+      it('should be overridden by inline option minimum-input-length=2', function(){
+        var el = setupWithAttr(2);
+        expect(el.scope().$select.minimumInputLength).toBe(2);
+      });
+
+    });    
+
   });
 });
