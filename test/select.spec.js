@@ -1547,6 +1547,106 @@ describe('ui-select tests', function() {
     });
   });
 
+  describe('minimum-input-length option', function() {
+
+    var el;
+
+    function setupSelectComponent(minimumInputLength, theme) {
+      el = compileTemplate(
+        '<ui-select ng-model="selection.selected" theme="' + theme + '" minimum-input-length="' + minimumInputLength + '"> \
+          <ui-select-match placeholder="Pick one...">{{$select.selected.name}}</ui-select-match> \
+          <ui-select-choices repeat="person in people | filter: $select.search"> \
+            <div ng-bind-html="person.name | highlight: $select.search"></div> \
+            <div ng-bind-html="person.email | highlight: $select.search"></div> \
+          </ui-select-choices> \
+        </ui-select>'
+      );
+    }
+
+    it('should show minimum input notice when > 0 and dropdown is open', function() {
+      setupSelectComponent(2, 'select2');
+      openDropdown(el);
+      expect($(el).find('.ui-select-input-too-short')).not.toHaveClass('ng-hide');
+    });
+
+    it('should hide minimum input notice when 0 and dropdown is open', function() {
+      setupSelectComponent(0, 'select2');
+      openDropdown(el);
+      expect($(el).find('.ui-select-input-too-short')).toHaveClass('ng-hide');
+    });
+
+    it('should show items when minimum input length has been reached', function() {
+      setupSelectComponent(2, 'select2');
+      openDropdown(el);
+      setSearchText(el, 'Ad');
+      expect(countChoices(el)).toBe(3);
+    });
+
+    it('should hide items if minimum input length has not been reached', function() {
+      setupSelectComponent(4, 'select2');
+      openDropdown(el);
+      setSearchText(el, 'Ad');
+      expect(countChoices(el)).toBe(0);
+    });
+
+    it('should call the refresh function if minimum input length has been reached', function() {
+      el = compileTemplate(
+        '<ui-select ng-model="selection.selected" minimum-input-length="2"> \
+          <ui-select-match placeholder="Pick one...">{{$select.selected.name}}</ui-select-match> \
+          <ui-select-choices repeat="person in people | filter: $select.search" \
+            refresh="fetchFromServer($select.search)" refresh-delay="0"> \
+            <div ng-bind-html="person.name | highlight: $select.search"></div> \
+            <div ng-bind-html="person.email | highlight: $select.search"></div> \
+          </ui-select-choices> \
+        </ui-select>'
+      );
+
+      scope.fetchFromServer = function(){};
+
+      spyOn(scope, 'fetchFromServer');
+
+      el.scope().$select.search = 'ra';
+      scope.$digest();
+      $timeout.flush();
+
+      expect(scope.fetchFromServer).toHaveBeenCalled();
+    });
+
+    it('should not call the refresh function if minimum input length has not been reached', function() {
+      el = compileTemplate(
+        '<ui-select ng-model="selection.selected" minimum-input-length="2"> \
+          <ui-select-match placeholder="Pick one...">{{$select.selected.name}}</ui-select-match> \
+          <ui-select-choices repeat="person in people | filter: $select.search" \
+            refresh="fetchFromServer($select.search)" refresh-delay="0"> \
+            <div ng-bind-html="person.name | highlight: $select.search"></div> \
+            <div ng-bind-html="person.email | highlight: $select.search"></div> \
+          </ui-select-choices> \
+        </ui-select>'
+      );
+
+      scope.fetchFromServer = function(){};
+
+      spyOn(scope, 'fetchFromServer');
+
+      el.scope().$select.search = 'r';
+      scope.$digest();
+      $timeout.flush();
+
+      expect(scope.fetchFromServer).not.toHaveBeenCalled();
+    });
+
+    it('should clear items if input falls below minimum input length', function() {
+      setupSelectComponent(2, 'select2');
+      openDropdown(el);
+      setSearchText(el, 'Ad');
+      // Make sure there is always something to flush for $timeout.flush()
+      $timeout(function(){});
+      setSearchText(el, 'A');
+      expect(countChoices(el)).toBe(0);
+    });
+
+  });
+
   describe('default configuration via uiSelectConfig', function() {
 
     describe('searchEnabled option', function() {
