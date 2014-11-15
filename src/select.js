@@ -943,6 +943,8 @@
             $select.activeIndex = 0;
             if ($select.search.length >= $select.minimumInputLength) {
               $select.refresh(attrs.refresh);
+            } else {
+              $select.items = [];
             }
           });
 
