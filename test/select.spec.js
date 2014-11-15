@@ -126,6 +126,15 @@ describe('ui-select tests', function() {
     scope.$digest();
   };
 
+  function countChoices(el) {
+
+    if (!isDropdownOpened(el)){
+      openDropdown(el);
+    }
+
+    return $(el).find('.ui-select-choices-row').length;
+  }
+
 
   // Tests
 
