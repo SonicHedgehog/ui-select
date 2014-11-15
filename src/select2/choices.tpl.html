@@ -7,4 +7,7 @@
       </li>
     </ul>
   </li>
+  <li class="ui-select-input-too-short select2-no-results" ng-show="$select.items.length == 0 && $select.search.length < $select.minimumInputLength">
+    Please enter {{$select.minimumInputLength - $select.search.length}} or more characters
+  </li>
 </ul>
