@@ -941,7 +941,9 @@
           scope.$watch('$select.search', function(newValue) {
             if(newValue && !$select.open && $select.multiple) $select.activate(false, true);
             $select.activeIndex = 0;
-            $select.refresh(attrs.refresh);
+            if ($select.search.length >= $select.minimumInputLength) {
+              $select.refresh(attrs.refresh);
+            }
           });
 
           attrs.$observe('refreshDelay', function() {
