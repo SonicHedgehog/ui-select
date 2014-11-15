@@ -68,7 +68,8 @@
     searchEnabled: true,
     placeholder: '', // Empty by default, like HTML tag <select>
     refreshDelay: 1000, // In milliseconds
-    closeOnSelect: true
+    closeOnSelect: true,
+    minimumInputLength: 0
   })
 
   // See Rename minErr and make it accessible from outside https://github.com/angular/angular.js/issues/6913
@@ -163,6 +164,7 @@
     ctrl.lockChoiceExpression = undefined; // Initialized inside uiSelect directive link function
     ctrl.closeOnSelect = true; // Initialized inside uiSelect directive link function
     ctrl.clickTriggeredSelect = false;
+    ctrl.minimumInputLength = undefined; // Initialized inside uiSelect directive link function
 
     ctrl.isEmpty = function() {
       return angular.isUndefined(ctrl.selected) || ctrl.selected === null || ctrl.selected === '';
@@ -783,6 +785,11 @@
         scope.$watch('searchEnabled', function() {
             var searchEnabled = scope.$eval(attrs.searchEnabled);
             $select.searchEnabled = searchEnabled !== undefined ? searchEnabled : uiSelectConfig.searchEnabled;
+        });
+
+        scope.$watch('minimumInputLength', function() {
+          var minimumInputLength = scope.$eval(attrs.minimumInputLength);
+          $select.minimumInputLength = minimumInputLength !== undefined ? minimumInputLength : uiSelectConfig.minimumInputLength;
         });
 
         attrs.$observe('disabled', function() {
