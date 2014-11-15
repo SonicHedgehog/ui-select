@@ -6,5 +6,8 @@
         <div class="option ui-select-choices-row-inner" data-selectable></div>
       </div>
     </div>
+    <div class="ui-select-input-too-short" ng-show="$select.items.length == 0 && $select.search.length < $select.minimumInputLength">
+      Please enter {{$select.minimumInputLength - $select.search.length}} or more characters
+    </div>
   </div>
 </div>
