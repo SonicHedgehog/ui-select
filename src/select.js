@@ -244,7 +244,7 @@
       // See https://github.com/angular/angular.js/blob/v1.2.15/src/ng/directive/ngRepeat.js#L259
       $scope.$watchCollection(ctrl.parserResult.source, function(items) {
 
-        if (items === undefined || items === null) {
+        if (items === undefined || items === null || ctrl.search.length < ctrl.minimumInputLength) {
           // If the user specifies undefined or null => reset the collection
           // Special case: items can be undefined if the user did not initialized the collection on the scope
           // i.e $scope.addresses = [] is missing
