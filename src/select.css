@@ -54,6 +54,11 @@
     border-color: #D44950;
 }
 
+.selectize-dropdown-content > .ui-select-input-too-short {
+  padding: 5px 8px;
+  overflow: hidden;
+}
+
 
 /* Bootstrap theme */
 
